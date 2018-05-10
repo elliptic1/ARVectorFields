@@ -1,9 +1,4 @@
-# ARCore Cloud Anchors Sample
+# Augmented Reality 3D Vector Fields for Android
 
-This is a sample app demonstrating how ARCore anchors can be hosted and resolved
-using the ARCore Cloud Service.
+This is an educational app that will show particles moving in a vector field. It will use cloud anchors so that a classroom full of students can all see the same thing.
 
-## Getting Started
-
- See [Get started with Cloud Anchors for Android](https://developers.google.com/ar/develop/java/cloud-anchors/cloud-anchors-quickstart-android)
- to learn how to set up your development environment and try out this sample app.
