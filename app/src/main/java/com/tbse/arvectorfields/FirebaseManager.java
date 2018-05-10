@@ -97,7 +97,7 @@ class FirebaseManager {
         new Transaction.Handler() {
           @Override
           public Transaction.Result doTransaction(MutableData currentData) {
-            Long nextCode = Long.valueOf(1);
+            Long nextCode = 1L;
             Object currVal = currentData.getValue();
             if (currVal != null) {
               Long lastCode = Long.valueOf(currVal.toString());
@@ -125,7 +125,7 @@ class FirebaseManager {
     DatabaseReference roomRef = hotspotListRef.child(String.valueOf(roomCode));
     roomRef.child(KEY_DISPLAY_NAME).setValue(DISPLAY_NAME_VALUE);
     roomRef.child(KEY_ANCHOR_ID).setValue(cloudAnchorId);
-    roomRef.child(KEY_TIMESTAMP).setValue(Long.valueOf(System.currentTimeMillis()));
+    roomRef.child(KEY_TIMESTAMP).setValue(System.currentTimeMillis());
   }
 
   /**
