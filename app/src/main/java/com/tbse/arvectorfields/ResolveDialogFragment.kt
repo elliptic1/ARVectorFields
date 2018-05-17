@@ -21,10 +21,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
-import android.text.Editable
-import android.view.View
 import android.widget.EditText
-
 import com.google.common.base.Preconditions
 
 /** A DialogFragment for the Resolve Dialog Box.  */
@@ -32,15 +29,6 @@ class ResolveDialogFragment : DialogFragment() {
 
     private var roomCodeField: EditText? = null
     private var okListener: OkListener? = null
-
-    interface OkListener {
-        /**
-         * This method is called by the dialog box when its OK button is pressed.
-         *
-         * @param dialogValue the long value from the dialog box
-         */
-        fun onOkPressed(dialogValue: Long?)
-    }
 
     fun setOkListener(okListener: OkListener) {
         this.okListener = okListener
