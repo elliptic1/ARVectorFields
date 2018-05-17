@@ -155,7 +155,7 @@ class GoogleSignInActivity : BaseActivity(), View.OnClickListener {
     private fun updateUI(user: FirebaseUser?) {
         hideProgressDialog()
         if (user != null) {
-            status.text = getString(R.string.google_status_fmt, user.email)
+            status.text = getString(R.string.google_status_fmt, user.providerData[0].displayName)
             detail.text = getString(R.string.firebase_status_fmt, user.uid)
 
             sign_in_button.visibility = View.GONE
