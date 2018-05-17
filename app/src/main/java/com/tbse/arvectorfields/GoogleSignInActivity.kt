@@ -53,7 +53,9 @@ class GoogleSignInActivity : BaseActivity(), View.OnClickListener {
 
         // [START config_signin]
         // Configure Google Sign In
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .build()
         // [END config_signin]
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
@@ -78,10 +80,10 @@ class GoogleSignInActivity : BaseActivity(), View.OnClickListener {
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 // Google Sign In was successful, authenticate with Firebase
-                val account = task.getResult(ApiException::class.java)
+                val account = GoogleSignIn.getSignedInAccountFromIntent(data)
+                        .getResult(ApiException::class.java)
                 firebaseAuthWithGoogle(account)
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
@@ -97,11 +99,12 @@ class GoogleSignInActivity : BaseActivity(), View.OnClickListener {
 
     // [START auth_with_google]
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.id)
+        Log.d(TAG, "firebaseAuthWithGoogle ID:" + acct.id)
         // [START_EXCLUDE silent]
         showProgressDialog()
         // [END_EXCLUDE]
 
+        Log.d(TAG, "firebaseAuthWithGoogle ID Token:" + acct.idToken)
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         mAuth?.signInWithCredential(credential)
                 ?.addOnCompleteListener(this, { task ->
