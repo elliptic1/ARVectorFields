@@ -34,6 +34,11 @@
         android:usesCleartextTraffic="false"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
+
+        <meta-data
+            android:name="com.google.android.ar.API_KEY"
+            android:value="@string/api_key"/>
+
         <activity
             android:name="com.tbse.arvectorfields.CloudAnchorActivity"
             android:configChanges="orientation|screenSize"

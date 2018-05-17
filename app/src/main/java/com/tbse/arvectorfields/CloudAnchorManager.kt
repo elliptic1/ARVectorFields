@@ -19,8 +19,7 @@ package com.tbse.arvectorfields
 import com.google.ar.core.Anchor
 import com.google.ar.core.Anchor.CloudAnchorState
 import com.google.ar.core.Session
-import com.google.common.base.Preconditions
-import java.util.HashMap
+import java.util.*
 
 /**
  * A helper class to handle all the Cloud Anchors logic, and add a callback-like mechanism on top of
@@ -57,7 +56,7 @@ internal class CloudAnchorManager {
      */
     @Synchronized
     fun hostCloudAnchor(anchor: Anchor, listener: CloudAnchorListener) {
-        val newAnchor = session!!.hostCloudAnchor(anchor)
+        val newAnchor = session.hostCloudAnchor(anchor)
         pendingAnchors[newAnchor] = listener
     }
 
@@ -67,7 +66,7 @@ internal class CloudAnchorManager {
      */
     @Synchronized
     fun resolveCloudAnchor(anchorId: String, listener: CloudAnchorListener) {
-        val newAnchor = session!!.resolveCloudAnchor(anchorId)
+        val newAnchor = session.resolveCloudAnchor(anchorId)
         pendingAnchors[newAnchor] = listener
     }
 
