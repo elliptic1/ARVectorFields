@@ -15,12 +15,12 @@
         android:orientation="vertical">
 
         <ImageView
-            style="@style/ThemeOverlay.FirebaseIcon"
             android:id="@+id/google_icon"
-            android:contentDescription="@string/desc_firebase_lockup"
-            android:src="@drawable/firebase_lockup_400"
+            style="@style/ThemeOverlay.FirebaseIcon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/desc_firebase_lockup"
+            android:src="@drawable/firebase_lockup_400" />
 
         <TextView
             android:id="@+id/title_text"
@@ -39,6 +39,17 @@
             android:id="@+id/detail"
             style="@style/ThemeOverlay.MyTextDetail"
             tools:text="Firebase User ID: 123456789abc" />
+
+        <Button
+            android:id="@+id/launch_button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="@string/launch"
+            android:theme="@style/ThemeOverlay.MyDarkButton"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
     </LinearLayout>
 

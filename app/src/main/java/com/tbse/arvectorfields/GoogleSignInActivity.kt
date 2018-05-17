@@ -50,6 +50,7 @@ class GoogleSignInActivity : BaseActivity(), View.OnClickListener {
         sign_in_button.setOnClickListener(this)
         sign_out_button.setOnClickListener(this)
         disconnect_button.setOnClickListener(this)
+        launch_button.setOnClickListener(this)
 
         // [START config_signin]
         // Configure Google Sign In
@@ -159,14 +160,21 @@ class GoogleSignInActivity : BaseActivity(), View.OnClickListener {
             detail.text = getString(R.string.firebase_status_fmt, user.uid)
 
             sign_in_button.visibility = View.GONE
+            launch_button.visibility = View.VISIBLE
             sign_out_and_disconnect.visibility = View.VISIBLE
         } else {
             status.setText(R.string.signed_out)
             detail.text = null
 
             sign_in_button.visibility = View.VISIBLE
+            launch_button.visibility = View.GONE
             sign_out_and_disconnect.visibility = View.GONE
         }
+    }
+
+    private fun launchARVectorFields() {
+        startActivity(CloudAnchorActivity.newIntent(this))
+        finish()
     }
 
     override fun onClick(v: View) {
@@ -174,6 +182,7 @@ class GoogleSignInActivity : BaseActivity(), View.OnClickListener {
             R.id.sign_in_button -> signIn()
             R.id.sign_out_button -> signOut()
             R.id.disconnect_button -> revokeAccess()
+            R.id.launch_button -> launchARVectorFields()
         }
     }
 

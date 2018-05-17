@@ -16,33 +16,22 @@
 
 package com.tbse.arvectorfields
 
+import android.content.Context
+import android.content.Intent
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.annotation.GuardedBy
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.widget.Button
-import android.widget.TextView
+import android.view.SurfaceView
 import android.widget.Toast
-
-import com.google.ar.core.Anchor
-import com.google.ar.core.Anchor.CloudAnchorState
-import com.google.ar.core.ArCoreApk
-import com.google.ar.core.Camera
-import com.google.ar.core.Config
+import com.google.ar.core.*
 import com.google.ar.core.Config.CloudAnchorMode
-import com.google.ar.core.Frame
-import com.google.ar.core.HitResult
-import com.google.ar.core.Plane
-import com.google.ar.core.Point
 import com.google.ar.core.Point.OrientationMode
-import com.google.ar.core.PointCloud
-import com.google.ar.core.Session
-import com.google.ar.core.Trackable
-import com.google.ar.core.TrackingState
 import com.google.ar.core.exceptions.CameraNotAvailableException
 import com.google.ar.core.exceptions.UnavailableApkTooOldException
 import com.google.ar.core.exceptions.UnavailableArcoreNotInstalledException
@@ -58,9 +47,7 @@ import com.tbse.arvectorfields.common.rendering.ObjectRenderer
 import com.tbse.arvectorfields.common.rendering.PlaneRenderer
 import com.tbse.arvectorfields.common.rendering.PointCloudRenderer
 import kotlinx.android.synthetic.main.activity_main.*
-
 import java.io.IOException
-
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -76,7 +63,6 @@ import javax.microedition.khronos.opengles.GL10
 class CloudAnchorActivity : AppCompatActivity(), GLSurfaceView.Renderer, OkListener {
 
     // Rendering. The Renderers are created here, and initialized when the GL surface is created.
-    private var surfaceView: GLSurfaceView? = null
     private val backgroundRenderer = BackgroundRenderer()
     private val virtualObject = ObjectRenderer()
     private val virtualObjectShadow = ObjectRenderer()
@@ -122,6 +108,7 @@ class CloudAnchorActivity : AppCompatActivity(), GLSurfaceView.Renderer, OkListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         displayRotationHelper = DisplayRotationHelper(this)
 
         // Set up tap listener.
@@ -141,14 +128,14 @@ class CloudAnchorActivity : AppCompatActivity(), GLSurfaceView.Renderer, OkListe
                         return true
                     }
                 })
-        surfaceView!!.setOnTouchListener { v, event -> gestureDetector!!.onTouchEvent(event) }
+        surfaceview.setOnTouchListener { v, event -> gestureDetector!!.onTouchEvent(event) }
 
         // Set up renderer.
-        surfaceView!!.preserveEGLContextOnPause = true
-        surfaceView!!.setEGLContextClientVersion(2)
-        surfaceView!!.setEGLConfigChooser(8, 8, 8, 8, 16, 0) // Alpha used for plane blending.
-        surfaceView!!.setRenderer(this)
-        surfaceView!!.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+        surfaceview.preserveEGLContextOnPause = true
+        surfaceview.setEGLContextClientVersion(2)
+        surfaceview.setEGLConfigChooser(8, 8, 8, 8, 16, 0) // Alpha used for plane blending.
+        surfaceview.setRenderer(this)
+        surfaceview.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
         installRequested = false
 
         // Initialize UI components.
@@ -158,10 +145,7 @@ class CloudAnchorActivity : AppCompatActivity(), GLSurfaceView.Renderer, OkListe
         // Initialize Cloud Anchor variables.
         firebaseManager = FirebaseManager(this)
         currentMode = HostResolveMode.NONE
-    }
 
-    override fun onResume() {
-        super.onResume()
 
         if (session == null) {
             var exception: Exception? = null
@@ -226,7 +210,7 @@ class CloudAnchorActivity : AppCompatActivity(), GLSurfaceView.Renderer, OkListe
             return
         }
 
-        surfaceView!!.onResume()
+        surfaceview.onResume()
         displayRotationHelper!!.onResume()
     }
 
@@ -237,7 +221,7 @@ class CloudAnchorActivity : AppCompatActivity(), GLSurfaceView.Renderer, OkListe
             // to query the session. If Session is paused before GLSurfaceView, GLSurfaceView may
             // still call session.update() and get a SessionPausedException.
             displayRotationHelper!!.onPause()
-            surfaceView!!.onPause()
+            surfaceview.onPause()
             session!!.pause()
         }
     }
@@ -589,6 +573,10 @@ class CloudAnchorActivity : AppCompatActivity(), GLSurfaceView.Renderer, OkListe
                 return trackable.orientationMode == OrientationMode.ESTIMATED_SURFACE_NORMAL
             }
             return false
+        }
+
+        fun newIntent(context: Context): Intent {
+            return Intent(context, CloudAnchorActivity::class.java)
         }
     }
 }
