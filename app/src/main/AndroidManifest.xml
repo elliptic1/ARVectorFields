@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
    Copyright 2018 Google Inc.
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,39 +15,53 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.google.ar.core.examples.java.cloudanchor">
+    package="com.tbse.arvectorfields">
 
-  <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!--
+       This tag indicates that this application requires ARCore.  This results in the application
+       only being visible in the Google Play Store on devices that support ARCore.
+    -->
+    <uses-feature
+        android:name="android.hardware.camera.ar"
+        android:required="true" />
 
-  <uses-permission android:name="android.permission.INTERNET" />
-  <!-- This tag indicates that this application requires ARCore.  This results in the application
-       only being visible in the Google Play Store on devices that support ARCore. -->
-  <uses-feature android:name="android.hardware.camera.ar" android:required="true"/>
-
-  <application
-      android:allowBackup="false"
-      android:icon="@drawable/ic_launcher"
-      android:label="@string/app_name"
-      android:theme="@style/AppTheme"
-      android:usesCleartextTraffic="false"
-      tools:ignore="GoogleAppIndexingWarning">
-
-    <activity
-        android:name="com.tbse.arvectorfields.CloudAnchorActivity"
+    <application
+        android:allowBackup="false"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:configChanges="orientation|screenSize"
-        android:exported="true"
+        android:usesCleartextTraffic="false"
         android:theme="@style/Theme.AppCompat.NoActionBar"
-        android:screenOrientation="locked">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-    </activity>
-    <!-- This tag indicates that this application requires ARCore.  This results in the Google Play
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name="com.tbse.arvectorfields.CloudAnchorActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:screenOrientation="locked"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            />
+        <!--
+         This tag indicates that this application requires ARCore.  This results in the Google Play
          Store downloading and installing ARCore along with the application.
          Application code must still call ArCoreApk.requestInstall() before beginning an ARCore
-         sessions, in case the user uninstalls ARCore for any reason. -->
-    <meta-data android:name="com.google.ar.core" android:value="required" />
-  </application>
+         sessions, in case the user uninstalls ARCore for any reason.
+        -->
+        <meta-data
+            android:name="com.google.ar.core"
+            android:value="required" />
+
+        <activity
+            android:name="com.tbse.arvectorfields.GoogleSignInActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+    </application>
+
 </manifest>

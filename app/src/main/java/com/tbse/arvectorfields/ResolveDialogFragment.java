@@ -26,7 +26,6 @@ import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
 
-import com.google.ar.core.examples.java.cloudanchor.R;
 import com.google.common.base.Preconditions;
 
 /** A DialogFragment for the Resolve Dialog Box. */
