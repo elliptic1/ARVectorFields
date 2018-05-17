@@ -21,13 +21,11 @@ import android.content.Intent
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.annotation.GuardedBy
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.view.SurfaceView
 import android.widget.Toast
 import com.google.ar.core.*
 import com.google.ar.core.Config.CloudAnchorMode
@@ -94,9 +92,9 @@ class CloudAnchorActivity : AppCompatActivity(), GLSurfaceView.Renderer, OkListe
     private var anchor: Anchor? = null
 
     // Cloud Anchor Components.
-    private var firebaseManager: FirebaseManager? = null
+    private lateinit var firebaseManager: FirebaseManager
     private val cloudManager = CloudAnchorManager()
-    private var currentMode: HostResolveMode? = null
+    private var currentMode: HostResolveMode = HostResolveMode.NONE
     private var hostListener: RoomCodeAndCloudAnchorIdListener? = null
 
     private enum class HostResolveMode {
@@ -144,8 +142,6 @@ class CloudAnchorActivity : AppCompatActivity(), GLSurfaceView.Renderer, OkListe
 
         // Initialize Cloud Anchor variables.
         firebaseManager = FirebaseManager(this)
-        currentMode = HostResolveMode.NONE
-
 
         if (session == null) {
             var exception: Exception? = null
@@ -421,7 +417,7 @@ class CloudAnchorActivity : AppCompatActivity(), GLSurfaceView.Renderer, OkListe
         snackbarHelper.showMessageWithDismiss(this, getString(R.string.snackbar_on_host))
 
         hostListener = RoomCodeAndCloudAnchorIdListener()
-        firebaseManager!!.getNewRoomCode(hostListener!!)
+        firebaseManager.getNewRoomCode(hostListener!!)
     }
 
     /**
@@ -451,7 +447,7 @@ class CloudAnchorActivity : AppCompatActivity(), GLSurfaceView.Renderer, OkListe
         resolve_button.isEnabled = true
         room_code_text.setText(R.string.initial_room_code)
         currentMode = HostResolveMode.NONE
-        firebaseManager!!.clearRoomListener()
+        firebaseManager.clearRoomListener()
         hostListener = null
         setNewAnchor(null)
         snackbarHelper.hide(this)
@@ -469,7 +465,7 @@ class CloudAnchorActivity : AppCompatActivity(), GLSurfaceView.Renderer, OkListe
         snackbarHelper.showMessageWithDismiss(this, getString(R.string.snackbar_on_resolve))
 
         // Register a new listener for the given room.
-        firebaseManager!!.registerNewListenerForRoom(
+        firebaseManager.registerNewListenerForRoom(
                 roomCode,
                 object : FirebaseManager.CloudAnchorIdListener {
                     override fun onNewCloudAnchorId(cloudAnchorId: String) {
@@ -551,7 +547,7 @@ class CloudAnchorActivity : AppCompatActivity(), GLSurfaceView.Renderer, OkListe
             if (roomCode == null || cloudAnchorId == null) {
                 return
             }
-            firebaseManager!!.storeAnchorIdInRoom(roomCode, cloudAnchorId!!)
+            firebaseManager.storeAnchorIdInRoom(roomCode, cloudAnchorId!!)
             snackbarHelper.showMessageWithDismiss(
                     this@CloudAnchorActivity, getString(R.string.snackbar_cloud_id_shared))
         }
