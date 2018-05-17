@@ -189,8 +189,8 @@ public class CloudAnchorActivity extends AppCompatActivity implements GLSurfaceV
 
                 // ARCore requires camera permissions to operate. If we did not yet obtain runtime
                 // permission on Android M and above, now is a good time to ask the user for it.
-                if (!CameraPermissionHelper.hasCameraPermission(this)) {
-                    CameraPermissionHelper.requestCameraPermission(this);
+                if (!CameraPermissionHelper.INSTANCE.hasCameraPermission(this)) {
+                    CameraPermissionHelper.INSTANCE.requestCameraPermission(this);
                     return;
                 }
                 session = new Session(this);
@@ -255,12 +255,12 @@ public class CloudAnchorActivity extends AppCompatActivity implements GLSurfaceV
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] results) {
-        if (!CameraPermissionHelper.hasCameraPermission(this)) {
+        if (!CameraPermissionHelper.INSTANCE.hasCameraPermission(this)) {
             Toast.makeText(this, "Camera permission is needed to run this application", Toast.LENGTH_LONG)
                     .show();
-            if (!CameraPermissionHelper.shouldShowRequestPermissionRationale(this)) {
+            if (!CameraPermissionHelper.INSTANCE.shouldShowRequestPermissionRationale(this)) {
                 // Permission denied with checking "Do not ask again".
-                CameraPermissionHelper.launchPermissionSettings(this);
+                CameraPermissionHelper.INSTANCE.launchPermissionSettings(this);
             }
             finish();
         }
@@ -269,7 +269,7 @@ public class CloudAnchorActivity extends AppCompatActivity implements GLSurfaceV
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        FullScreenHelper.setFullScreenOnWindowFocusChanged(this, hasFocus);
+        FullScreenHelper.INSTANCE.setFullScreenOnWindowFocusChanged(this, hasFocus);
     }
 
     /**
