@@ -25,8 +25,8 @@ import android.support.design.widget.Snackbar
 class SnackbarHelper {
     private var messageSnackbar: Snackbar? = null
 
-    val isShowing: Boolean
-        get() = messageSnackbar != null
+//    val isShowing: Boolean
+//        get() = messageSnackbar != null
 
     private enum class DismissBehavior {
         HIDE, SHOW, FINISH

@@ -21,13 +21,12 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
-import android.widget.EditText
 import com.google.common.base.Preconditions
+import kotlinx.android.synthetic.main.resolve_dialog.*
 
 /** A DialogFragment for the Resolve Dialog Box.  */
 class ResolveDialogFragment : DialogFragment() {
 
-    private var roomCodeField: EditText? = null
     private var okListener: OkListener? = null
 
     fun setOkListener(okListener: OkListener) {
@@ -40,15 +39,14 @@ class ResolveDialogFragment : DialogFragment() {
 
         // Passing null as the root is fine, because the view is for a dialog.
         val dialogView = activity.layoutInflater.inflate(R.layout.resolve_dialog, null)
-        roomCodeField = dialogView.findViewById(R.id.room_code_input)
         builder
                 .setView(dialogView)
                 .setTitle(R.string.resolve_dialog_title)
                 .setPositiveButton(
                         R.string.resolve_dialog_ok
                 ) { dialog, which ->
-                    val roomCodeText = roomCodeField!!.text
-                    if (okListener != null && roomCodeText != null && roomCodeText.length > 0) {
+                    val roomCodeText = room_code_input.text
+                    if (okListener != null && roomCodeText != null && roomCodeText.isNotEmpty()) {
                         val longVal = java.lang.Long.valueOf(roomCodeText.toString())
                         okListener!!.onOkPressed(longVal)
                     }

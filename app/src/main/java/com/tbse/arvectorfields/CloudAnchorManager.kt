@@ -95,8 +95,8 @@ internal class CloudAnchorManager {
     }
 
     companion object {
-        private val TAG =
-                CloudAnchorActivity::class.java.simpleName + "." + CloudAnchorManager::class.java.simpleName
+//        private val TAG =
+//                CloudAnchorActivity::class.java.simpleName + "." + CloudAnchorManager::class.java.simpleName
 
         private fun isReturnableState(cloudState: CloudAnchorState): Boolean {
             return when (cloudState) {

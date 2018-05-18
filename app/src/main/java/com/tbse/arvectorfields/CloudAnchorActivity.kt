@@ -126,7 +126,7 @@ class CloudAnchorActivity : AppCompatActivity(), GLSurfaceView.Renderer, OkListe
                         return true
                     }
                 })
-        surfaceview.setOnTouchListener { v, event -> gestureDetector!!.onTouchEvent(event) }
+        surfaceview.setOnTouchListener { _, event -> gestureDetector!!.onTouchEvent(event) }
 
         // Set up renderer.
         surfaceview.preserveEGLContextOnPause = true
@@ -137,8 +137,8 @@ class CloudAnchorActivity : AppCompatActivity(), GLSurfaceView.Renderer, OkListe
         installRequested = false
 
         // Initialize UI components.
-        host_button.setOnClickListener { view -> onHostButtonPress() }
-        resolve_button.setOnClickListener { view -> onResolveButtonPress() }
+        host_button.setOnClickListener { _ -> onHostButtonPress() }
+        resolve_button.setOnClickListener { _ -> onResolveButtonPress() }
 
         // Initialize Cloud Anchor variables.
         firebaseManager = FirebaseManager(this)
@@ -153,6 +153,8 @@ class CloudAnchorActivity : AppCompatActivity(), GLSurfaceView.Renderer, OkListe
                         return
                     }
                     ArCoreApk.InstallStatus.INSTALLED -> {
+                    }
+                    null -> {
                     }
                 }
 
@@ -465,37 +467,32 @@ class CloudAnchorActivity : AppCompatActivity(), GLSurfaceView.Renderer, OkListe
         snackbarHelper.showMessageWithDismiss(this, getString(R.string.snackbar_on_resolve))
 
         // Register a new listener for the given room.
-        firebaseManager.registerNewListenerForRoom(
-                roomCode,
-                object : FirebaseManager.CloudAnchorIdListener {
-                    override fun onNewCloudAnchorId(cloudAnchorId: String) {
-                        // When the cloud anchor ID is available from Firebase.
-                        cloudManager.resolveCloudAnchor(
-                                cloudAnchorId,
-                                object : CloudAnchorManager.CloudAnchorListener {
-                                    override fun onCloudTaskComplete(anchor: Anchor) {
-                                        // When the anchor has been resolved, or had a final error state.
-                                        val cloudState = anchor.cloudAnchorState
-                                        if (cloudState.isError) {
-                                            Log.w(
-                                                    TAG,
-                                                    "The anchor in room "
-                                                            + roomCode
-                                                            + " could not be resolved. The error state was "
-                                                            + cloudState)
-                                            snackbarHelper.showMessageWithDismiss(
-                                                    this@CloudAnchorActivity,
-                                                    getString(R.string.snackbar_resolve_error, cloudState))
-                                            return
-                                        }
-                                        snackbarHelper.showMessageWithDismiss(
-                                                this@CloudAnchorActivity, getString(R.string.snackbar_resolve_success))
-                                        setNewAnchor(anchor)
-                                    }
-                                })
-                    }
-                }
-        )
+        firebaseManager.registerNewListenerForRoom(roomCode) { cloudAnchorId ->
+            // When the cloud anchor ID is available from Firebase.
+            cloudManager.resolveCloudAnchor(
+                    cloudAnchorId,
+                    object : CloudAnchorManager.CloudAnchorListener {
+                        override fun onCloudTaskComplete(anchor: Anchor) {
+                            // When the anchor has been resolved, or had a final error state.
+                            val cloudState = anchor.cloudAnchorState
+                            if (cloudState.isError) {
+                                Log.w(
+                                        TAG,
+                                        "The anchor in room "
+                                                + roomCode
+                                                + " could not be resolved. The error state was "
+                                                + cloudState)
+                                snackbarHelper.showMessageWithDismiss(
+                                        this@CloudAnchorActivity,
+                                        getString(R.string.snackbar_resolve_error, cloudState))
+                                return
+                            }
+                            snackbarHelper.showMessageWithDismiss(
+                                    this@CloudAnchorActivity, getString(R.string.snackbar_resolve_success))
+                            setNewAnchor(anchor)
+                        }
+                    })
+        }
     }
 
     /**
