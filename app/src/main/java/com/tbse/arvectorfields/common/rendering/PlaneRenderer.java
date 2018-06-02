@@ -123,9 +123,9 @@ public class PlaneRenderer {
      */
     public void createOnGlThread(Context context, String gridDistanceTextureName) throws IOException {
         int vertexShader =
-                ShaderUtil.loadGLShader(TAG, context, GLES20.GL_VERTEX_SHADER, VERTEX_SHADER_NAME);
+                ShaderUtil.INSTANCE.loadGLShader(TAG, context, GLES20.GL_VERTEX_SHADER, VERTEX_SHADER_NAME);
         int passthroughShader =
-                ShaderUtil.loadGLShader(TAG, context, GLES20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER_NAME);
+                ShaderUtil.INSTANCE.loadGLShader(TAG, context, GLES20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER_NAME);
 
         planeProgram = GLES20.glCreateProgram();
         GLES20.glAttachShader(planeProgram, vertexShader);
@@ -133,7 +133,7 @@ public class PlaneRenderer {
         GLES20.glLinkProgram(planeProgram);
         GLES20.glUseProgram(planeProgram);
 
-        ShaderUtil.checkGLError(TAG, "Program creation");
+        ShaderUtil.INSTANCE.checkGLError(TAG, "Program creation");
 
         // Read the texture.
         Bitmap textureBitmap =
@@ -150,7 +150,7 @@ public class PlaneRenderer {
         GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 
-        ShaderUtil.checkGLError(TAG, "Texture loading");
+        ShaderUtil.INSTANCE.checkGLError(TAG, "Texture loading");
 
         planeXZPositionAlphaAttribute = GLES20.glGetAttribLocation(planeProgram, "a_XZPositionAlpha");
 
@@ -164,7 +164,7 @@ public class PlaneRenderer {
         gridControlUniform = GLES20.glGetUniformLocation(planeProgram, "u_gridControl");
         planeUvMatrixUniform = GLES20.glGetUniformLocation(planeProgram, "u_PlaneUvMatrix");
 
-        ShaderUtil.checkGLError(TAG, "Program parameters");
+        ShaderUtil.INSTANCE.checkGLError(TAG, "Program parameters");
     }
 
     /**
@@ -280,7 +280,7 @@ public class PlaneRenderer {
         indexBuffer.rewind();
         GLES20.glDrawElements(
                 GLES20.GL_TRIANGLE_STRIP, indexBuffer.limit(), GLES20.GL_UNSIGNED_SHORT, indexBuffer);
-        ShaderUtil.checkGLError(TAG, "Drawing plane");
+        ShaderUtil.INSTANCE.checkGLError(TAG, "Drawing plane");
     }
 
     static class SortablePlane {
@@ -360,7 +360,7 @@ public class PlaneRenderer {
         // Enable vertex arrays
         GLES20.glEnableVertexAttribArray(planeXZPositionAlphaAttribute);
 
-        ShaderUtil.checkGLError(TAG, "Setting up to draw planes");
+        ShaderUtil.INSTANCE.checkGLError(TAG, "Setting up to draw planes");
 
         for (SortablePlane sortedPlane : sortedPlanes) {
             Plane plane = sortedPlane.plane;
@@ -407,7 +407,7 @@ public class PlaneRenderer {
         GLES20.glDisable(GLES20.GL_BLEND);
         GLES20.glDepthMask(true);
 
-        ShaderUtil.checkGLError(TAG, "Cleaning up after drawing planes");
+        ShaderUtil.INSTANCE.checkGLError(TAG, "Cleaning up after drawing planes");
     }
 
     // Calculate the normal distance to plane from cameraPose, the given planePose should have y axis

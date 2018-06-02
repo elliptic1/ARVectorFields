@@ -102,9 +102,9 @@ public class BackgroundRenderer {
         quadTexCoordTransformed = bbTexCoordsTransformed.asFloatBuffer();
 
         int vertexShader =
-                ShaderUtil.loadGLShader(TAG, context, GLES20.GL_VERTEX_SHADER, VERTEX_SHADER_NAME);
+                ShaderUtil.INSTANCE.loadGLShader(TAG, context, GLES20.GL_VERTEX_SHADER, VERTEX_SHADER_NAME);
         int fragmentShader =
-                ShaderUtil.loadGLShader(TAG, context, GLES20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER_NAME);
+                ShaderUtil.INSTANCE.loadGLShader(TAG, context, GLES20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER_NAME);
 
         quadProgram = GLES20.glCreateProgram();
         GLES20.glAttachShader(quadProgram, vertexShader);
@@ -112,12 +112,12 @@ public class BackgroundRenderer {
         GLES20.glLinkProgram(quadProgram);
         GLES20.glUseProgram(quadProgram);
 
-        ShaderUtil.checkGLError(TAG, "Program creation");
+        ShaderUtil.INSTANCE.checkGLError(TAG, "Program creation");
 
         quadPositionParam = GLES20.glGetAttribLocation(quadProgram, "a_Position");
         quadTexCoordParam = GLES20.glGetAttribLocation(quadProgram, "a_TexCoord");
 
-        ShaderUtil.checkGLError(TAG, "Program parameters");
+        ShaderUtil.INSTANCE.checkGLError(TAG, "Program parameters");
     }
 
     /**
@@ -172,7 +172,7 @@ public class BackgroundRenderer {
         GLES20.glDepthMask(true);
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
-        ShaderUtil.checkGLError(TAG, "Draw");
+        ShaderUtil.INSTANCE.checkGLError(TAG, "Draw");
     }
 
     private static final float[] QUAD_COORDS =

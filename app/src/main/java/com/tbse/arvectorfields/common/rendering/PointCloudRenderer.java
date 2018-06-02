@@ -63,7 +63,7 @@ public class PointCloudRenderer {
      * @param context Needed to access shader source.
      */
     public void createOnGlThread(Context context) throws IOException {
-        ShaderUtil.checkGLError(TAG, "before create");
+        ShaderUtil.INSTANCE.checkGLError(TAG, "before create");
 
         int[] buffers = new int[1];
         GLES20.glGenBuffers(1, buffers, 0);
@@ -74,12 +74,12 @@ public class PointCloudRenderer {
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, vboSize, null, GLES20.GL_DYNAMIC_DRAW);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
-        ShaderUtil.checkGLError(TAG, "buffer alloc");
+        ShaderUtil.INSTANCE.checkGLError(TAG, "buffer alloc");
 
         int vertexShader =
-                ShaderUtil.loadGLShader(TAG, context, GLES20.GL_VERTEX_SHADER, VERTEX_SHADER_NAME);
+                ShaderUtil.INSTANCE.loadGLShader(TAG, context, GLES20.GL_VERTEX_SHADER, VERTEX_SHADER_NAME);
         int passthroughShader =
-                ShaderUtil.loadGLShader(TAG, context, GLES20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER_NAME);
+                ShaderUtil.INSTANCE.loadGLShader(TAG, context, GLES20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER_NAME);
 
         programName = GLES20.glCreateProgram();
         GLES20.glAttachShader(programName, vertexShader);
@@ -87,14 +87,14 @@ public class PointCloudRenderer {
         GLES20.glLinkProgram(programName);
         GLES20.glUseProgram(programName);
 
-        ShaderUtil.checkGLError(TAG, "program");
+        ShaderUtil.INSTANCE.checkGLError(TAG, "program");
 
         positionAttribute = GLES20.glGetAttribLocation(programName, "a_Position");
         colorUniform = GLES20.glGetUniformLocation(programName, "u_Color");
         modelViewProjectionUniform = GLES20.glGetUniformLocation(programName, "u_ModelViewProjection");
         pointSizeUniform = GLES20.glGetUniformLocation(programName, "u_PointSize");
 
-        ShaderUtil.checkGLError(TAG, "program  params");
+        ShaderUtil.INSTANCE.checkGLError(TAG, "program  params");
     }
 
     /**
@@ -107,7 +107,7 @@ public class PointCloudRenderer {
             return;
         }
 
-        ShaderUtil.checkGLError(TAG, "before update");
+        ShaderUtil.INSTANCE.checkGLError(TAG, "before update");
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vbo);
         lastPointCloud = cloud;
@@ -124,7 +124,7 @@ public class PointCloudRenderer {
                 GLES20.GL_ARRAY_BUFFER, 0, numPoints * BYTES_PER_POINT, lastPointCloud.getPoints());
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
-        ShaderUtil.checkGLError(TAG, "after update");
+        ShaderUtil.INSTANCE.checkGLError(TAG, "after update");
     }
 
     /**
@@ -139,7 +139,7 @@ public class PointCloudRenderer {
         float[] modelViewProjection = new float[16];
         Matrix.multiplyMM(modelViewProjection, 0, cameraPerspective, 0, cameraView, 0);
 
-        ShaderUtil.checkGLError(TAG, "Before draw");
+        ShaderUtil.INSTANCE.checkGLError(TAG, "Before draw");
 
         GLES20.glUseProgram(programName);
         GLES20.glEnableVertexAttribArray(positionAttribute);
@@ -153,6 +153,6 @@ public class PointCloudRenderer {
         GLES20.glDisableVertexAttribArray(positionAttribute);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
-        ShaderUtil.checkGLError(TAG, "Draw");
+        ShaderUtil.INSTANCE.checkGLError(TAG, "Draw");
     }
 }
