@@ -36,6 +36,8 @@ import kotlinx.android.synthetic.main.activity_google.*
  */
 class GoogleSignInActivity : BaseActivity(), View.OnClickListener {
 
+    external fun stringMethod(text: String): String
+
     // [START declare_auth]
     private var mAuth: FirebaseAuth? = null
     // [END declare_auth]
@@ -128,8 +130,17 @@ class GoogleSignInActivity : BaseActivity(), View.OnClickListener {
     }
     // [END auth_with_google]
 
+    init {
+        System.loadLibrary("native_lib")
+    }
+
     // [START signin]
     private fun signIn() {
+
+        val text = stringMethod("a")
+
+        Log.d("3d", "stringMethod: $text")
+
         val signInIntent = mGoogleSignInClient?.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
